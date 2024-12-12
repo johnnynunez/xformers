@@ -13,6 +13,7 @@ on:
       - "requirements*.txt"
       - "xformers/csrc/attention/hip_fmha/**"
       - "third_party/composable_kernel_tiled/**"
+      - "third_party/composable_kernel_tiled"
   workflow_dispatch:
 
 jobs:
