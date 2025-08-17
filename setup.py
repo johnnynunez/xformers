@@ -177,7 +177,7 @@ def get_flash_attention2_nvcc_archs_flags(cuda_version: int):
     # Figure out default archs to target
     DEFAULT_ARCHS_LIST = ""
     if cuda_version >= 1300:
-        DEFAULT_ARCHS_LIST = "8.0;8.6;8.9;9.0;10.0;11.0;12.0;12.1"
+        DEFAULT_ARCHS_LIST = "8.0;8.6;8.7;8.9;9.0;10.0;10.3;11.0;12.0;12.1"
     elif cuda_version >= 1208:
         DEFAULT_ARCHS_LIST = "8.0;8.6;8.9;9.0;10.0;12.0"
     elif cuda_version >= 1108:
@@ -287,13 +287,13 @@ def get_flash_attention3_nvcc_archs_flags(cuda_version: int):
     if archs_list is None:
         if torch.cuda.get_device_capability("cuda") != (9, 0):
             return []
-        archs_list = "8.0 9.0a 10.0a"
+        archs_list = "8.0 8.7 8.9 9.0a 10.0a 10.3a 11.0a 12.0a 12.1a"
     nvcc_archs_flags = []
     for arch in archs_list.replace(" ", ";").split(";"):
         match = PARSE_CUDA_ARCH_RE.match(arch)
         assert match is not None, f"Invalid sm version: {arch}"
         num = 10 * int(match.group("major")) + int(match.group("minor"))
-        if num not in [80, 90, 100]:  # only support Sm80/Sm90
+        if num not in [80, 87, 89, 90, 100, 110, 120, 121]:  # only support Sm80/Sm90
             continue
         suffix = match.group("suffix")
         nvcc_archs_flags.append(
