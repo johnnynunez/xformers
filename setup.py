@@ -781,6 +781,23 @@ if __name__ == "__main__":
         is_building_wheel,
     )
     extensions, extensions_metadata = get_extensions()
+    # Detect CPython free-threaded (no-GIL) builds. On those builds,
+    # the limited/stable API ("abi3") is currently incompatible, so
+    # we must NOT set py_limited_api.
+    import os, sysconfig
+    def _is_free_threaded():
+        # Various distros/toolchains expose one of these flags; try both.
+        return bool(
+            sysconfig.get_config_var("Py_GIL_DISABLED")
+            or sysconfig.get_config_var("PY_GIL_DISABLED")
+            or os.environ.get("PYTHON_FREE_THREADED")  # manual override if needed
+        )
+
+    bdist_opts = {}
+    if not _is_free_threaded():
+        # Keep abi3 on regular (GIL) CPython to maximize wheel reuse
+        bdist_opts["py_limited_api"] = "cp39"
+        
     setuptools.setup(
         name="xformers",
         description="XFormers: A collection of composable Transformer building blocks.",
@@ -816,5 +833,5 @@ if __name__ == "__main__":
             "Operating System :: OS Independent",
         ],
         zip_safe=False,
-        options={"bdist_wheel": {"py_limited_api": "cp39"}},
+        options={"bdist_wheel": bdist_opts},
     )
