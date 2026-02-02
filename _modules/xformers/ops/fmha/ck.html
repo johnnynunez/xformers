@@ -12,7 +12,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>xformers.ops.fmha.ck | xFormers 0.0.33 documentation</title>
+  <title>xformers.ops.fmha.ck | xFormers 0.0.35 documentation</title>
   
   <script src="../../../../_static/js/ga.js"></script>
   <script src="../../../../_static/js/redirect.js"></script>
@@ -22,7 +22,7 @@
   
   <link rel="canonical" href="https://facebookresearch.github.io/xformers_modules/xformers/ops/fmha/ck.html" />
   
-  <meta property="og:title" content="xformers.ops.fmha.ck | xFormers 0.0.33 documentation">
+  <meta property="og:title" content="xformers.ops.fmha.ck | xFormers 0.0.35 documentation">
   <meta name="description" content="API docs for xFormers. xFormers is a PyTorch extension library for composable and optimized Transformer blocks.">
   <meta property="og:description" content="API docs for xFormers. xFormers is a PyTorch extension library for composable and optimized Transformer blocks.">
   <!--<meta property="og:image" content="https://mmf.sh/img/logo.png">-->
@@ -297,10 +297,7 @@
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attn_bias</span><span class="p">,</span> <span class="n">PagedBlockDiagonalGappyKeysMask</span><span class="p">):</span>
         <span class="n">seqstart_k</span> <span class="o">=</span> <span class="n">attn_bias</span><span class="o">.</span><span class="n">k_seqinfo</span><span class="o">.</span><span class="n">seqstart</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">assert</span> <span class="p">(</span>
-            <span class="n">seqlen</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-        <span class="p">),</span> <span class="s2">&quot;seqlen must not be None for PagedBlockDiagonalGappyKeysMask&quot;</span>
-        <span class="n">seqlen</span> <span class="o">=</span> <span class="n">seqlen</span> <span class="o">-</span> <span class="n">seqstart_k</span>
+        <span class="n">seqlen</span> <span class="o">=</span> <span class="n">seqlen</span> <span class="o">-</span> <span class="n">seqstart_k</span>  <span class="c1"># type: ignore</span>
 
     <span class="k">return</span> <span class="n">seqstart_k</span><span class="p">,</span> <span class="n">seqstart_q</span><span class="p">,</span> <span class="n">seqlen</span><span class="p">,</span> <span class="n">max_seqlen_q</span><span class="p">,</span> <span class="n">max_seqlen_k</span>
 
